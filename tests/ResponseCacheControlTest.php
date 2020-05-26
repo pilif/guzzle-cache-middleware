@@ -30,7 +30,7 @@ class ResponseCacheControlTest extends TestCase
                 case '/2s-complex':
                     return new FulfilledPromise(
                         (new Response())
-                            ->withAddedHeader('Cache-Control', 'invalid-token="yes", max-age=2, stale-while-revalidate=60')
+                            ->withAddedHeader('Cache-Control', 'invalid-token="yes", max-age=2, stale-while-revalidate=3')
                     );
                 case '/no-store':
                     return new FulfilledPromise(
