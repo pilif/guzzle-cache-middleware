@@ -165,7 +165,7 @@ class CacheMiddleware
                         $cacheEntry->getResponse()->withHeader(static::HEADER_CACHE_INFO, static::HEADER_CACHE_HIT)
                     );
                 } elseif ($cacheEntry->staleWhileValidate()
-                    && ($staleResponse || $cacheEntry->getStaleAge() <= $maxStaleCache)
+                    && (($maxStaleCache === null) || ($staleResponse || $cacheEntry->getStaleAge() <= $maxStaleCache))
                 ) {
                     /*
                      * The cached response indicated that it may be served stale while background revalidation (or fetch)
@@ -183,7 +183,7 @@ class CacheMiddleware
                         $cacheEntry->getResponse()
                             ->withHeader(self::HEADER_CACHE_INFO, self::HEADER_CACHE_STALE)
                     );
-                } elseif ($cacheEntry->hasValidationInformation() && !$onlyFromCache) {
+                } elseif (($cacheEntry->staleWhileValidate() && $cacheEntry->getStaleAge() <= $maxStaleCache) || ($cacheEntry->hasValidationInformation() && !$onlyFromCache)) {
                     // Re-validation header
                     $request = static::getRequestWithReValidationHeader($request, $cacheEntry);
                 }

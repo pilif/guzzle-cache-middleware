@@ -92,6 +92,11 @@ class ResponseCacheControlTest extends TestCase
         sleep(3);
 
         $response = $this->client->get('http://test.com/2s-complex');
+        $this->assertEquals(CacheMiddleware::HEADER_CACHE_STALE, $response->getHeaderLine(CacheMiddleware::HEADER_CACHE_INFO));
+
+        sleep(5);
+
+        $response = $this->client->get('http://test.com/2s-complex');
         $this->assertEquals(CacheMiddleware::HEADER_CACHE_MISS, $response->getHeaderLine(CacheMiddleware::HEADER_CACHE_INFO));
     }
 
